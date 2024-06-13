@@ -1,4 +1,4 @@
-**Introducing Watch List: A Feature-Rich Movies Watch List App**
+# Introducing Watch List: A Feature-Rich Movies Watch List App
 
 **Watch List** is a comprehensive Flutter application designed to streamline your movie exploration journey. It empowers you to:
 
