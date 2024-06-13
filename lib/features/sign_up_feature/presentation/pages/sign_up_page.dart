@@ -1,16 +1,19 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:watch_list/core/constants/strings.dart';
 import 'package:watch_list/core/theme/app_theme.dart';
 import 'package:watch_list/core/util/functions.dart';
+import 'package:watch_list/features/movies_feature/presentation/pages/movies_lists_page.dart';
 import 'package:watch_list/features/sign_up_feature/domain/entities/user_entity.dart';
-import 'package:watch_list/features/sign_up_feature/presentation/bloc/bloc/user_bloc.dart';
-import 'package:watch_list/features/sign_up_feature/presentation/pages/movies_widget.dart';
-import 'package:watch_list/features/sign_up_feature/presentation/widgets/custom_text_field_widget.dart';
+import 'package:watch_list/features/sign_up_feature/presentation/bloc/user_bloc/user_bloc.dart';
+import 'package:watch_list/core/widgets/custom_text_field_widget.dart';
 
 class SignUpPage extends StatelessWidget {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _userNameController = TextEditingController();
+  final GlobalKey<FormState> _nameFormKey = GlobalKey<FormState>(),
+      _ageFormKey = GlobalKey<FormState>();
+  final TextEditingController _userNameController = TextEditingController(),
+      _userAgeController = TextEditingController();
   final randomNum = getRandomIntFromRange(1, 15);
   SignUpPage({super.key});
 
@@ -19,39 +22,57 @@ class SignUpPage extends StatelessWidget {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Stack(children: [
-        _buildPicture(screenHeight, screenWidth),
-        _buildFilter1(screenHeight, screenWidth),
-        _buildFilter2(screenHeight, screenWidth),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            FadeInDown(
-              duration: const Duration(seconds: 1),
-              child: _buildTitle(),
-            ),
-            FadeInRight(
-              duration: const Duration(seconds: 2),
-              child: _buildTextField(),
-            ),
-            FadeInUp(
-              duration: const Duration(seconds: 2),
-              child: BlocListener<UserBloc, UserState>(
-                listener: (context, state) {
-                  if (state is UserStoredState) {
-                    showSnackBar(state.message, context, true);
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => const MoviesWidget()),
-                        (route) => false);
-                  }
-                },
-                child: _buildButton(context),
+      body: SafeArea(
+        child: Stack(children: [
+          _buildPicture(screenHeight, screenWidth),
+          _buildFilter1(screenHeight, screenWidth),
+          _buildFilter2(screenHeight, screenWidth),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              FadeInDown(
+                duration: const Duration(seconds: 1),
+                child: _buildTitle(),
               ),
-            ),
-          ],
-        ),
-      ]),
+              FadeInRight(
+                duration: const Duration(seconds: 2),
+                child: _buildTextField(
+                    keyboardType: 1,
+                    icon: Icons.person,
+                    formController: _nameFormKey,
+                    hintMessage: 'Enter your name here',
+                    textEditingController: _userNameController),
+              ),
+              FadeInRight(
+                duration: const Duration(seconds: 2),
+                child: _buildTextField(
+                    keyboardType: 0,
+                    icon: Icons.date_range_rounded,
+                    formController: _ageFormKey,
+                    hintMessage: 'Enter your age here',
+                    textEditingController: _userAgeController),
+              ),
+              FadeInUp(
+                duration: const Duration(seconds: 2),
+                child: BlocListener<UserBloc, UserState>(
+                  listener: (context, state) {
+                    if (state is UserStoredState) {
+                      showSnackBar(state.message, context, true);
+                      _userAgeController.dispose();
+                      _userNameController.dispose();
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const MoviesListsPage()),
+                          (route) => false);
+                    }
+                  },
+                  child: _buildButton(context),
+                ),
+              ),
+            ],
+          ),
+        ]),
+      ),
     );
   }
 
@@ -97,13 +118,20 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField() {
+  Widget _buildTextField(
+      {required GlobalKey<FormState> formController,
+      required int keyboardType,
+      required IconData icon,
+      required TextEditingController textEditingController,
+      required String hintMessage}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: CustomTextFieldWidget(
-        controller: _userNameController,
-        formKey: _formKey,
-        hintMessage: 'Enter your name here',
+        keyboardType: keyboardType,
+        icon: icon,
+        controller: textEditingController,
+        formKey: formController,
+        hintMessage: hintMessage,
       ),
     );
   }
@@ -116,11 +144,23 @@ class SignUpPage extends StatelessWidget {
           Expanded(
             child: TextButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  User user = User(
-                      userName: _userNameController.text,
-                      userFavouriteMovies: const []);
-                  context.read<UserBloc>().add(CacheUserDataEvent(user: user));
+                if (_nameFormKey.currentState!.validate()) {
+                  if (_ageFormKey.currentState!.validate()) {
+                    bool isAdult;
+                    if (int.parse(_userAgeController.text) < 18) {
+                      isAdult = false;
+                    } else {
+                      isAdult = true;
+                    }
+                    User user = User(
+                        isAdult: isAdult,
+                        userName: _userNameController.text,
+                        userFavouriteMovies: const []);
+                    showSnackBar(SUCCESS_MESSAGE, context, true);
+                    context
+                        .read<UserBloc>()
+                        .add(CacheUserDataEvent(user: user));
+                  }
                 }
               },
               style: TextButton.styleFrom(

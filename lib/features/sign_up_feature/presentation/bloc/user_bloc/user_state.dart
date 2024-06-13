@@ -31,3 +31,17 @@ class UserErrorState extends UserState {
   @override
   List<Object> get props => [message];
 }
+
+class UserMovieAddedState extends UserState {
+  final List<Movie> movies;
+  const UserMovieAddedState({required this.movies});
+  @override
+  List<Object> get props => [movies];
+}
+
+class UserMovieRemovedState extends UserState {
+  final List<Movie> movies;
+  const UserMovieRemovedState({required this.movies});
+  @override
+  List<Object> get props => [movies];
+}

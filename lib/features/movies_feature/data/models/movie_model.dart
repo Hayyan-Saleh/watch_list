@@ -12,7 +12,7 @@ class MovieModel extends Movie {
       required final String overview,
       required final double popularity,
       required final double voteAverage,
-      required final double voteCount})
+      required final int voteCount})
       : super(
             backdropPath: backdropPath,
             id: id,
@@ -26,34 +26,50 @@ class MovieModel extends Movie {
             voteAverage: voteAverage,
             voteCount: voteCount);
 
-  factory MovieModel.fromJson(Map<String, dynamic> jsonMovie) {
+  factory MovieModel.fromJson(Map<String, dynamic> jsonMap) {
+    if (jsonMap.isEmpty) return MovieModel.defaultModel();
+    final String posterPath = jsonMap['poster_path'] ?? 'not available';
+    final String backdropPath = jsonMap['backdrop_path'] ?? 'not available';
     return MovieModel(
-        id: jsonMovie['id'],
-        isAdult: jsonMovie['isAdult'],
-        backdropPath: jsonMovie['backdropPath'],
-        posterPath: jsonMovie['posterPath'],
-        originalLanguage: jsonMovie['originalLanguage'],
-        originalTitle: jsonMovie['originalTitle'],
-        releaseDate: jsonMovie['releaseDate'],
-        overview: jsonMovie['overview'],
-        popularity: jsonMovie['popularity'],
-        voteAverage: jsonMovie['voteAverage'],
-        voteCount: jsonMovie['voteCount']);
+        id: jsonMap['id'],
+        isAdult: jsonMap['adult'],
+        backdropPath: backdropPath,
+        posterPath: posterPath,
+        originalLanguage: jsonMap['original_language'],
+        originalTitle: jsonMap['original_title'],
+        releaseDate: jsonMap['release_date'],
+        overview: jsonMap['overview'],
+        popularity: jsonMap['popularity'],
+        voteAverage: jsonMap['vote_average'],
+        voteCount: jsonMap['vote_count']);
   }
-
+  factory MovieModel.defaultModel() {
+    return const MovieModel(
+        id: 0,
+        isAdult: false,
+        backdropPath: 'backdropPath',
+        posterPath: 'posterPath',
+        originalLanguage: 'originalLanguage',
+        originalTitle: 'originalTitle',
+        releaseDate: 'releaseDate',
+        overview: 'overview',
+        popularity: 0.0,
+        voteAverage: 0.0,
+        voteCount: 0);
+  }
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'isAdult': isAdult,
-      'backdropPath': backdropPath,
-      'posterPath': posterPath,
-      'originalLanguage': originalLanguage,
-      'originalTitle': originalTitle,
-      'releaseDate': releaseDate,
+      'adult': isAdult,
+      'backdrop_path': backdropPath,
+      'poster_path': posterPath,
+      'original_language': originalLanguage,
+      'original_title': originalTitle,
+      'release_date': releaseDate,
       'overview': overview,
       'popularity': popularity,
-      'voteAverage': voteAverage,
-      'voteCount': voteCount
+      'vote_average': voteAverage,
+      'vote_count': voteCount
     };
   }
 }

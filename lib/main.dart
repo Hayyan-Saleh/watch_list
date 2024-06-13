@@ -2,24 +2,25 @@ import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watch_list/core/constants/strings.dart';
+import 'package:watch_list/core/theme/app_theme.dart';
 import 'package:watch_list/core/util/functions.dart';
 import 'package:watch_list/core/widgets/loading_widget.dart';
-import 'package:watch_list/features/sign_up_feature/presentation/bloc/bloc/user_bloc.dart';
-import 'package:watch_list/features/sign_up_feature/presentation/pages/movies_widget.dart';
+import 'package:watch_list/features/movies_feature/presentation/pages/movies_lists_page.dart';
+import 'package:watch_list/features/sign_up_feature/presentation/bloc/user_bloc/user_bloc.dart';
 import 'package:watch_list/features/sign_up_feature/presentation/pages/sign_up_page.dart';
 import 'package:watch_list/injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await di.init();
-  runApp(MultiBlocProvider(
-      providers: [
-        BlocProvider<UserBloc>(
-          create: (context) => di.sl<UserBloc>()..add(GetUserDataEvent()),
-        )
-      ],
-      child:
-          const MaterialApp(debugShowCheckedModeBanner: false, home: MyApp())));
+  runApp(BlocProvider<UserBloc>(
+    create: (context) => di.sl<UserBloc>()..add(GetUserDataEvent()),
+    child: MaterialApp(
+        theme: appTheme,
+        debugShowCheckedModeBanner: false,
+        home: const MyApp()),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -40,7 +41,10 @@ class MyApp extends StatelessWidget {
       childWidget: SizedBox(
           height: 0.5 * height,
           width: 0.7 * width,
-          child: Image.asset(LOADING3_PATH)),
+          child: Padding(
+            padding: EdgeInsets.only(left: 0.04 * width),
+            child: Image.asset(LOADING3_PATH),
+          )),
       nextScreen: _handelNextScreen(),
       backgroundImage: _buildPicture(height, width),
     );
@@ -49,13 +53,15 @@ class MyApp extends StatelessWidget {
   Widget _handelNextScreen() {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
-        Widget nextScreen = const MoviesWidget();
+        Widget nextScreen = const Placeholder();
         if (state is UserLoadedState) {
-          nextScreen = const MoviesWidget();
+          nextScreen = const MoviesListsPage();
         } else if (state is UserLoadingState) {
           nextScreen = const Scaffold(body: LoadingWidget());
         } else if (state is UserErrorState) {
           nextScreen = SignUpPage();
+        } else if (state is UserStoredState) {
+          nextScreen = const MoviesListsPage();
         }
         return nextScreen;
       },

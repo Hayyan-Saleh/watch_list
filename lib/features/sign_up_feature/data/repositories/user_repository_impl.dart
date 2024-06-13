@@ -12,7 +12,9 @@ class UserRepositoryImp implements UserRepository {
   @override
   Future<void> cacheUserData(User user) async {
     final userModel = UserModel(
-        userName: user.userName, userFavouriteMovies: user.userFavouriteMovies);
+        userName: user.userName,
+        userFavouriteMovies: user.userFavouriteMovies,
+        isAdult: user.isAdult);
     await localDataSource.cacheUserData(userModel);
   }
 

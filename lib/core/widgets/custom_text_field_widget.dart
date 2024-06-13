@@ -4,9 +4,13 @@ import 'package:watch_list/core/theme/app_theme.dart';
 class CustomTextFieldWidget extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController controller;
+  final IconData icon;
   final String hintMessage;
+  final int keyboardType;
   const CustomTextFieldWidget(
       {required this.controller,
+      required this.keyboardType,
+      required this.icon,
       required this.formKey,
       required this.hintMessage,
       super.key});
@@ -19,6 +23,8 @@ class CustomTextFieldWidget extends StatelessWidget {
           cursorColor: primaryColor,
           style: const TextStyle(color: primaryColor),
           controller: controller,
+          keyboardType:
+              keyboardType == 1 ? TextInputType.name : TextInputType.number,
           autocorrect: true,
           validator: (value) =>
               value == null ? "Please Fill The Text Field !" : null,
@@ -27,8 +33,8 @@ class CustomTextFieldWidget extends StatelessWidget {
               hintStyle: const TextStyle(fontSize: 18, color: primaryColor),
               fillColor: Colors.black.withAlpha(200),
               filled: true,
-              suffixIcon: const Icon(
-                Icons.person,
+              suffixIcon: Icon(
+                icon,
                 color: primaryColor,
               ),
               border: OutlineInputBorder(

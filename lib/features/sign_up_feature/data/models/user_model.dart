@@ -4,20 +4,29 @@ import 'package:watch_list/features/sign_up_feature/domain/entities/user_entity.
 
 class UserModel extends User {
   const UserModel(
-      {required String userName, required List<Movie> userFavouriteMovies})
-      : super(userName: userName, userFavouriteMovies: userFavouriteMovies);
+      {required bool isAdult,
+      required String userName,
+      required List<Movie> userFavouriteMovies})
+      : super(
+            userName: userName,
+            userFavouriteMovies: userFavouriteMovies,
+            isAdult: isAdult);
   factory UserModel.fromJson(Map<String, dynamic> json) {
     final List<dynamic> jsonMovies = json['userFavouriteMovies'];
     final movies = jsonMovies
         .map<Movie>((jsonMovie) => MovieModel.fromJson(jsonMovie))
         .toList();
 
-    return UserModel(userName: json['userName'], userFavouriteMovies: movies);
+    return UserModel(
+        userName: json['userName'],
+        isAdult: json['isAdult'],
+        userFavouriteMovies: movies);
   }
 
   Map<String, dynamic> toJson() {
     return {
       'userName': userName,
+      'isAdult': isAdult,
       'userFavouriteMovies': userFavouriteMovies.map((movie) {
         MovieModel movieModel = MovieModel(
             id: movie.id,

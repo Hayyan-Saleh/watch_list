@@ -1,11 +1,11 @@
 // movie lists :
   
-  // first add the string /movies/
+  // first add the string /movie/
 
     // to get now playing movies ( Get a list of movies that are currently in theatres ): add the string now_playing
     // to get popular movies (Get a list of movies ordered by popularity) : add the string popular
     // to get top rated  movies ( Get a list of movies ordered by rating ): add the string top_rated
-    // to get now upcoming movies ( Get a list of movies that are being released soon ) : add the string upcoming
+    // to get upcoming movies ( Get a list of movies that are being released soon ) : add the string upcoming
 
   // first add the string /trending/movie/
 
@@ -23,7 +23,7 @@
 
   // first add the string /movie/{MOVIE_ID}/videos?api_key=YOUR_API_KEY
 
-    //ensure to add your movie id !!
+    //ensure to add your movie id !! sample  https://www.youtube.com/watch?v=VIDEO_ID
 
 // get the movie details based on the id :
 

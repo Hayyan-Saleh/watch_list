@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Movie extends Equatable {
-  final int id;
+  final int id, voteCount;
   final bool isAdult;
   final String backdropPath,
       posterPath,
@@ -9,7 +9,7 @@ class Movie extends Equatable {
       originalTitle,
       releaseDate,
       overview;
-  final double popularity, voteAverage, voteCount;
+  final double popularity, voteAverage;
 
   const Movie(
       {required this.backdropPath,
@@ -36,6 +36,6 @@ class Movie extends Equatable {
         overview,
         popularity,
         voteAverage,
-        voteCount
+        voteCount,
       ];
 }
