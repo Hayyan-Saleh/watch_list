@@ -37,7 +37,7 @@ class MovieDetailsRemoteDataSourceImpl implements MovieDetailsRemoteDataSource {
           return true;
         }
         return false;
-      }, orElse: () => decodedJson.first['key'])['key'];
+      }, orElse: () => decodedJson.first)['key'];
 
       // return 'https://www.youtube.com/watch?v=$result';
       return result;

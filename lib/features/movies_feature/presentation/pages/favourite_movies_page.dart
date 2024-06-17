@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watch_list/core/constants/strings.dart';
 import 'package:watch_list/core/theme/app_theme.dart';
+import 'package:watch_list/core/widgets/about_page.dart';
 import 'package:watch_list/features/movies_feature/domain/entities/movie_entity.dart';
 import 'package:watch_list/features/movies_feature/presentation/widgets/error_widgets/connection_error_widget.dart';
 import 'package:watch_list/features/movies_feature/presentation/widgets/movies_widgets/movie_widget.dart';
@@ -15,7 +16,7 @@ class FavouriteMoviesPage extends StatelessWidget {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
           if (state is UserLoadedState) {
@@ -54,7 +55,7 @@ class FavouriteMoviesPage extends StatelessWidget {
     );
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       iconTheme: const IconThemeData(
         color: Colors.black,
@@ -66,6 +67,21 @@ class FavouriteMoviesPage extends StatelessWidget {
       ),
       centerTitle: true,
       backgroundColor: primaryColor,
+      actions: [
+        Hero(
+          tag: 'navigation_to_about_page',
+          child: IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const AboutPage()));
+              },
+              color: secondaryColor.withAlpha(180),
+              icon: const Icon(
+                Icons.adb_outlined,
+                size: 30,
+              )),
+        ),
+      ],
     );
   }
 

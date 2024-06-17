@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watch_list/core/theme/app_theme.dart';
 import 'package:watch_list/core/util/functions.dart';
+import 'package:watch_list/core/widgets/about_page.dart';
 import 'package:watch_list/core/widgets/loading_widget.dart';
 import 'package:watch_list/features/movies_feature/domain/entities/movie_entity.dart';
 import 'package:watch_list/features/movies_feature/presentation/bloc/movies_list_bloc/movies_list_bloc.dart';
@@ -63,11 +64,11 @@ class MoviesListsPage extends StatelessWidget {
       {required double height,
       required BuildContext context,
       required List<Movie> todayMostTrendingMovies,
-      thisWeekMostTrendingMovies,
-      upcomingMovies,
-      topRatedMovies,
-      nowPlayingMovies,
-      popularMovies}) {
+      required List<Movie> thisWeekMostTrendingMovies,
+      required List<Movie> upcomingMovies,
+      required List<Movie> topRatedMovies,
+      required List<Movie> nowPlayingMovies,
+      required List<Movie> popularMovies}) {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
         if (state is UserLoadedState) {
@@ -85,7 +86,7 @@ class MoviesListsPage extends StatelessWidget {
                     duration: 10,
                     movies: todayMostTrendingMovies),
               ),
-              _buildSubTitle("This week's Top Trending Movise"),
+              _buildSubTitle("This week's Top Trending Movies"),
               SizedBox(
                 height: height,
                 child: CarouselMoviesWidget(
@@ -93,7 +94,7 @@ class MoviesListsPage extends StatelessWidget {
                     duration: 15,
                     movies: thisWeekMostTrendingMovies),
               ),
-              _buildSubTitle("Upcoming Movise"),
+              _buildSubTitle("Upcoming Movies"),
               FadeInLeft(
                 duration: const Duration(seconds: 3),
                 child: SizedBox(
@@ -103,7 +104,7 @@ class MoviesListsPage extends StatelessWidget {
                         height: 2 * height,
                         movies: upcomingMovies)),
               ),
-              _buildSubTitle("Top Rated Movise"),
+              _buildSubTitle("Top Rated Movies"),
               FadeInLeft(
                 duration: const Duration(seconds: 3),
                 child: SizedBox(
@@ -113,7 +114,7 @@ class MoviesListsPage extends StatelessWidget {
                         height: 2 * height,
                         movies: topRatedMovies)),
               ),
-              _buildSubTitle("Now Showing Movise"),
+              _buildSubTitle("Now Showing Movies"),
               SizedBox(
                 height: 1.5 * height,
                 child: HorizontalListViewWidget(
@@ -199,16 +200,20 @@ class MoviesListsPage extends StatelessWidget {
             style: TextStyle(
                 fontSize: 26, fontWeight: FontWeight.bold, color: primaryColor),
           ),
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        SearchPage(moviesListBloc: di.sl<MoviesListBloc>())));
-              },
-              icon: const Icon(
-                Icons.search,
-                size: 30,
-              )),
+          Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SearchPage(
+                            moviesListBloc: di.sl<MoviesListBloc>())));
+                  },
+                  icon: const Icon(
+                    Icons.search,
+                    size: 30,
+                  )),
+            ],
+          ),
         ],
       ),
     );
