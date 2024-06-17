@@ -84,7 +84,7 @@ class AboutPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(30.0),
             child: Text(
-              "This Simple Marks Project was done by Hayyan Saleh ! \n\nMy accounts :\n\nfacebook : https://www.facebook.com/hayyan.saleh.940 \n\nGithub : https://github.com/Hayyan-Saleh \n\nlinked in : https://www.linkedin.com/in/hayyan-saleh-6476b1267/ \n\n*you can click any Icon below to open the URL",
+              "This Simple Movies Project was done by Hayyan Saleh ! \n\nMy accounts :\n\nfacebook : https://www.facebook.com/hayyan.saleh.940 \n\nGithub : https://github.com/Hayyan-Saleh \n\nlinked in : https://www.linkedin.com/in/hayyan-saleh-6476b1267/ \n\n*you can click any Icon below to open the URL",
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
